@@ -11,11 +11,12 @@ public class GameManager : MonoBehaviour
     public GameObject enemyOnePrefab;
     public GameObject cloudPrefab;
     public int score;
+    public int lives;
     public int cloudsMove;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI livesText;
 
-    // Start is called before the first frame update
+
     void Start()
     {
         Instantiate(playerPrefab, transform.position, Quaternion.identity);
@@ -26,7 +27,6 @@ public class GameManager : MonoBehaviour
         scoreText.text = "Score: " + score;
     }
 
-    // Update is called once per frame
     void Update()
     {
         
@@ -55,5 +55,10 @@ public class GameManager : MonoBehaviour
     {
         score = score + scoreToAdd;
         scoreText.text = "Score: " + score;
+    }
+    public void LivesScore()
+    {
+        lives = GameObject.Find("Player(Clone)").GetComponent<Player>().lives;
+        livesText.text = "Lives: " + lives;
     }
 }

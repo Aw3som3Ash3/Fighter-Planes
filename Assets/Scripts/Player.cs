@@ -11,14 +11,14 @@ public class Player : MonoBehaviour
     private float verticalScreenLimit = 4f;
     public int lives;
 
-    // Start is called before the first frame update
+
     void Start()
     {
         playerSpeed = 6f;
         lives = 3;
+        GameObject.Find("GameManager").GetComponent<GameManager>().LivesScore();
     }
 
-    // Update is called once per frame
     void Update()
     {
         Movement();
@@ -52,14 +52,18 @@ public class Player : MonoBehaviour
     public void LoseLife()
     {
         lives--;
-        //lives -= 1;
-        //lives = lives - 1;
+        GameObject.Find("GameManager").GetComponent<GameManager>().LivesScore();
         if (lives <= 0) 
         {
-            //Game Over
-            GameObject.Find("GameManager").GetComponent<GameManager>().GameOver();
-            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-            Destroy(this.gameObject);
+            GameOverProcess();
         }
     }
+
+    private void GameOverProcess()
+    {
+        GameObject.Find("GameManager").GetComponent<GameManager>().GameOver();
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        Destroy(this.gameObject);
+    }
+
 }
