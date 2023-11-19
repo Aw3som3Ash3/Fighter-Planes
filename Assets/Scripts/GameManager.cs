@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
+using System;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +17,10 @@ public class GameManager : MonoBehaviour
     public int cloudsMove;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI livesText;
+    public TextMeshProUGUI powerupText;
+    public GameObject[] thingsThatSpawn;
+    public GameObject gameOverSet;
+    private bool isGameOver;
 
     // Start is called before the first frame update
     void Start()
@@ -21,15 +28,21 @@ public class GameManager : MonoBehaviour
         Instantiate(playerPrefab, transform.position, Quaternion.identity);
         CreateSky();
         InvokeRepeating("SpawnEnemyOne", 1f, 2f);
+        InvokeRepeating("SpawnSomething", 2f, 3f);
         cloudsMove = 1;
         score = 0;
         scoreText.text = "Score: " + score;
+        livesText.text = "Lives: 3";
+        isGameOver = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.R) && isGameOver)
+        {
+            SceneManager.LoadScene("Game");
+        }
     }
 
     void SpawnEnemyOne()
@@ -45,15 +58,34 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void SpawnSomething()
+    {
+        int tempInt;
+        tempInt = Random.Range(0, 3);
+        Instantiate(thingsThatSpawn[tempInt], new Vector3(Random.Range(-7f, 7f), Random.Range(0, -5f), 0), Quaternion.identity);
+    }
+
     public void GameOver()
     {
         CancelInvoke();
         cloudsMove = 0;
+        GetComponent<AudioSource>().Stop();
+        gameOverSet.SetActive(true);
+        isGameOver = true;
     }
 
     public void EarnScore(int scoreToAdd)
     {
         score = score + scoreToAdd;
         scoreText.text = "Score: " + score;
+    }
+    public void LivesChange(int currentLife)
+    {
+        livesText.text = "Lives: " + currentLife;
+    }
+
+    public void PowerupChange(string whatPowerup)
+    {
+        powerupText.text = whatPowerup;
     }
 }
