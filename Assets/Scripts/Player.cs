@@ -128,7 +128,7 @@ public class Player : MonoBehaviour
                 }
                 else if (tempInt == 3) //Shield powerup
                 {
-                    shield.SetActive(true);
+                    Shield();
                     StartCoroutine("ShieldPowerDown");
                     gM.GetComponent<GameManager>().PowerupChange("Shield");
                 }
@@ -151,11 +151,19 @@ public class Player : MonoBehaviour
         betterWeapon = false;
         gM.GetComponent<GameManager>().PowerupChange("No Powerup");
     }
+
+    void Shield()
+    {
+        shield.SetActive(true);
+        GetComponent<Collider2D>().enabled = false; //change
+    }
+
     IEnumerator ShieldPowerDown ()
     {
         yield return new WaitForSeconds(4f);
         AudioSource.PlayClipAtPoint(powerdownSound, transform.position);
         shield.SetActive(false);
+        GetComponent<Collider2D>().enabled = true; //change
         gM.GetComponent<GameManager>().PowerupChange("No Powerup");
     }
 }
